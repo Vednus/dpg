@@ -162,7 +162,7 @@ def createCommands(args):
     commands = []
 
     inputZip = args.input
-    outputZipDir = os.path.dirname(inputZip)
+    outputZipDir = os.path.splitext(inputZip)[0]
     print('outputZipDir: ', outputZipDir)
     os.mkdir(outputZipDir)
     with zipfile.ZipFile(inputZip, 'r') as zip_ref:
