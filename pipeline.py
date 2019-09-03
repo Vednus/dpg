@@ -162,9 +162,8 @@ def createCommands(args):
     commands = []
 
     inputZip = args.input
-    outputZipDir = os.path.splitext(inputZip)[0]
-    print('outputZipDir: ', outputZipDir)
-    os.mkdir(outputZipDir)
+    os.mkdir('zipFiles')
+    outputZipDir = os.path.realpath(os.path.join(os.getcwd(), 'datasets/zipFiles'))
     with zipfile.ZipFile(inputZip, 'r') as zip_ref:
         zip_ref.extractall(outputZipDir)
     inputDirectory = outputZipDir
