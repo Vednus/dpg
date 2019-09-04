@@ -162,15 +162,18 @@ def createCommands(args):
     commands = []
 
     inputZip = args.input
-    os.mkdir('zipFiles')
-    outputZipDir = os.path.realpath(os.path.join(os.getcwd(), 'datasets/zipFiles'))
+    os.mkdir('/tmp/zipFiles')
+    outputZipDir = os.path.realpath(os.path.join(os.getcwd(), 'tmp/zipFiles'))
     with zipfile.ZipFile(inputZip, 'r') as zip_ref:
         zip_ref.extractall(outputZipDir)
     inputDirectory = outputZipDir
-    global finalFilename
-    finalFilename = os.path.basename(outputZipDir)
+    global finalFilePath
+    print('inputZip: ', inputZip)
+    finalBaseDir = os.path.splitext(os.path.basename(inputZip))[0]
+    print('finalBaseDir: ', finalBaseDir)
+    finalFilePath = os.path.join(args.output, finalBaseDir)
     global outputDirectory
-    outputDirectory = args.output
+    outputDirectory = '/tmp/ouput'
     matchesDirectory = os.path.join(outputDirectory, 'matches')
     reconstructionDirectory = os.path.join(outputDirectory, 'reconstruction_global')
     global MVSDirectory
@@ -366,24 +369,24 @@ def createCommands(args):
         })
         commands.append({
             'title': 'Compress obj file',
-            'command': ['../../home/ptools/go/bin/obj-simplify', '-in', './omvs/' + inputName, '-out', './omvs/' + outputName]
+            'command': ['/root/go/bin/obj-simplify', '-in', './omvs/' + inputName, '-out', './omvs/' + outputName]
         })
         # copy needed files
         commands.append({
             'title': 'Copying files',
-            'command': ['mkdir', './' + finalFilename]
+            'command': ['mkdir', '-p', finalFilePath]
         })
         commands.append({
             'title': 'Move obj file',
-            'command': ['cp', './omvs/' + outputName, './' + finalFilename]
+            'command': ['cp', './omvs/' + outputName, os.path.join(finalFilePath, 'index.obj')]
         })
         commands.append({
             'title': 'Move texture',
-            'command': ['cp', './omvs/scene_mesh_refine_texture_material_0_map_Kd.jpg', './' + finalFilename]
+            'command': ['cp', './omvs/scene_mesh_refine_texture_material_0_map_Kd.jpg', os.path.join(finalFilePath, 'scene_mesh_refine_texture_material_0_map_Kd.jpg')]
         })
         commands.append({
             'title': 'Move mtl file',
-            'command': ['cp', './omvs/scene_mesh_refine_texture.mtl', './' + finalFilename]
+            'command': ['cp', './omvs/scene_mesh_refine_texture.mtl', os.path.join(finalFilePath, 'scene_mesh_refine_texture.mtl')]
         })
 
     if args.debug:
