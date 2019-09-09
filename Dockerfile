@@ -44,3 +44,4 @@ COPY pipeline.py /opt/dpg/pipeline.py
 WORKDIR /
 RUN go get github.com/jonnenauha/obj-simplify
 ENV PATH=/opt/openmvs/bin/OpenMVS:/opt/openmvg/bin:/opt/cmvs/bin:/opt/colmap/bin:/opt/dpg:$PATH
+CMD /opt/dpg/pipeline.py --input /input/$ZIPFILE --output /output --sfm-type incremental --geomodel f --run-openmvg --run-openmvs --output-obj
